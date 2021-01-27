@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin gestion des categories{% endblock %}
+
+{% block body %}
+<h1 class="logtitre">Admin Gestion des catégories</h1>
+ {% for message in app.flashes('message') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+
+    <section class="content container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Liste des articles</h3>
+                        <a href="{{path('admin_categorie_ajout')}}" class="btn btn-primary float-right">Ajouter</a>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if categories | length < 1 %}
+                            <h3 class="text-warning">Aucune recette enregistrée</h3>
+                            {% else %}
+                            {% for categorie in categories %}
+                                <tr>
+                                    <td>{{ categorie.id }}</td>
+                                    <td>{{ categorie.nom }}</td>
+                                    <td>
+                                        <form method="POST" action="{{path('admin_categorie_delete',{'id':categorie.id})}}"
+                                              onSubmit ="return confirm('Confirmer la suppression ?')" style="display:inline-block">
+                                            <input type="hidden" name="_method" value="SUP">
+                                            <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ categorie.id)}}">
+                                            <input type="submit" class="btn btn-danger" value="Supprimer">
+                                        </form>
+                                    </td>
+                                     
+                                  
+                                </tr>
+                            {% endfor %}
+                            {% endif %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                               <th>ID</th>
+                                <th>Nom</th>
+                                <th>Actions</th>
+
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+ 
+{% endblock %}

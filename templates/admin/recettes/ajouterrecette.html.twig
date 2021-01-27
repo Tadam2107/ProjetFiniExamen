@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ajouter une recette{% endblock %}
+
+{% block body %}
+  <h1 class="logtitre">Ajouter une recette</h1>
+  
+   <div class="container">
+   <div class="row justify-content-center">
+    <div class="col-6">
+  {{ form(formulaireRecette) }}
+  </div>
+   </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+document.querySelector("form-check").style.display = "none";
+
+</script>
+
+{% endblock %}

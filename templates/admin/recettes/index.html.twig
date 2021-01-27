@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin gestion des recettes{% endblock %}
+
+{% block body %}
+<h1 class="logtitre">Admin Gestion des recettes</h1>
+    {% for message in app.flashes('message') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+
+    <section class="content container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Liste des articles</h3>
+                        <a href="{{path('admin_recette_ajout')}}" class="btn btn-primary float-right">Ajouter</a>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date création</th>
+                                <th>Titre</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if menus | length < 1 %}
+                            <h3 class="text-warning">Aucune recette enregistrée</h3>
+                            {% else %}
+                            {% for menu in menus %}
+                                <tr>
+                                    <td>{{ menu.id }}</td>
+                                    <td>{{ menu.createdAt | date('d/m/Y',"Europe/Paris")}}</td>
+                                    <td>{{ menu.nom }}</td>
+                                    <td>
+                                        {{ menu.ingredients | slice(0,30) | raw}}...
+
+
+                                        <hr>
+                                        {% for cat in menu.categorie  %}
+                                            <span class="badge badge-info">{{cat.nom}}</span>
+                                         {% endfor %}
+                                    </td>
+                                    <td>
+                                        <img src="{{asset('images/uploads/menus/'~ menu.image)}}" alt="{{ menu.slug }}"  width="80" class="img-responsive">
+                                    </td>
+                                     <td>
+
+                                        {{ menu.actif ? '<span class="badge badge-success">Publié</span>' : '<span class="badge badge-danger">Non publié</span>'  }}
+
+                                    </td>
+                                    <td>
+                                        <a href="{{path('admin_recette_edit',{'id':menu.id})}}" class="btn btn-warning">Editer</a>
+
+                                        <form method="POST" action="{{path('admin_menu_delete',{'id':menu.id})}}"
+                                              onSubmit ="return confirm('Confirmer la suppression ?')" style="display:inline-block">
+                                            <input type="hidden" name="_method" value="SUP">
+                                            <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ menu.id)}}">
+                                            <input type="submit" class="btn btn-danger" value="Supprimer">
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            {% endif %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                               <th>ID</th>
+                                <th>Date création</th>
+                                <th>Titre</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+ 
+{% endblock %}
+
+

@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MenuController!{% endblock %}
+
+{% block body %}
+
+     <section id="pricing" class="logtitre">
+            <div id="w">
+                <div class="pricing-filter">
+                    <div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <div class="section-header">
+                                        <h2 class="pricing-title">Nos recettes</h2>
+                                        <ul id="filter-list" class="clearfix">
+                                            <li class="filter" data-filter="all">Tout</li>
+                                            <li class="filter" data-filter=".entrees">Entrées</li>
+                                            <li class="filter" data-filter=".plats">Plats</li>
+                                            <li class="filter" data-filter=".desserts">Desserts</li>                                  
+                                        </ul><!-- @end #filter-list -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+  <div class="container">
+
+  
+                        <div class="ingredients">
+                          <h4 id="compo"></h4>
+                          <button type="button" class="btn btn-primary mb-0" onclick="fermerComposition()">Fermer </button>
+                        </div>
+
+        <div class="row">
+             <div class="col-md-10 col-md-offset-1">
+                <ul id="menu-pricing" class="menu-price">
+                        {% if menus | length < 1 %}
+                        <p>Aucun article</p>
+                    {% else %}
+                    {% for menu in menus %}
+                    
+                        <li class="item {{menu.categorie.slug}}">
+                                    <a href="">
+                                    <img class="img-fluid" width="300" src="{{asset('images/uploads/menus/'~ menu.image)}}" alt="{{ menu.slug }}"  class="img-responsive">
+                                        <div class="menu-desc text-center">
+                                            <span>
+                                                <h3>{{menu.nom}}</h3>
+                                                <h4>{{menu.user.pseudo}}</h4>
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <button composition="{{menu.ingredients}}" type="button" class="btn btn-primary" onclick="afficheComposition(event)">Afficher la composition </button>
+                                    <h6 class="white">Posté le : {{ menu.createdAt | date('d/m/Y',"Europe/Paris")}}</h6>
+                                </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+            
+                            <!-- <div class="text-center">
+                                    <a id="loadPricingContent" class="btn btn-middle hidden-sm hidden-xs">Load More <span class="caret"></span></a>
+                            </div> -->
+
+        </section>
+{% endblock %}
+
+  {% block javascripts %}
+  
+  <script>
+
+  let divCompo = document.querySelector(".ingredients");
+  let compo =document.getElementById("compo");
+
+  function afficheComposition(e){
+    //  e.preventDefault();
+      let composition = event.currentTarget.getAttribute("composition");
+      compo.innerHTML = composition;
+      divCompo.style.display="block";
+    
+  }
+  
+  function fermerComposition(){
+   divCompo.style.display="none";
+   // document.location.reload();
+  }
+  </script>
+  
+  {% endblock %}
